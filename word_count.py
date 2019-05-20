@@ -25,28 +25,16 @@ class MRReviewWordCount(MRJob):
 
     def combiner(self, word, count):
         '''
-        Combiner function to count visits per visitor.
+        Combiner function to count words.
         '''
 
         yield (word, sum(count))
 
-    def reducer_init(self):
-        self.top_fifty = []
 
     def reducer(self, word, count):
-        '''
-        Reducer function to filter out visitors who visited less than
-        10 times.
-        '''
-        total = sum(count)
-        if len(self.top_fifty) < 50:
-            heapq.heappush(self.top_fifty, (total, word))
-        else:
-            heapq.heappushpop(self.top_fifty, (total, word))
 
-    def reducer_final(self):
-        for counts, word in self.top_fifty:
-            yield (word, counts)
+        yield (word, sum(count))
+m
 
 
 

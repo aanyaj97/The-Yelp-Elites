@@ -3,15 +3,12 @@ import os
 import re
 import ast
 import heapq
+import string
 
 from mrjob.job import MRJob
-from mrjob.protocol import JSONValueProtocol
-from mr3px.csvprotocol import CsvProtocol
 
 class MRReviewWordCount(MRJob):
 
-    INPUT_PROTOCOL: JSONValueProtocol
-    OUTPUT_PROTOCOL: CsvProtocol
 
     def mapper(self, _, line):
         '''
@@ -19,9 +16,12 @@ class MRReviewWordCount(MRJob):
         '''
 
         data_entry = ast.literal_eval(line)
-        words = re.findall(r'\w+', data_entry['text'])
-        for word in words:
-            yield (word.lower(), 1)
+        words = data_entry["text"].split()
+        lower_unique = set([word.translate(str.maketrans('', '',\
+                           string.punctuation)).lower() for word in words])
+        for word in lower_unique:
+            if word:
+               yield (word, 1)
 
     def combiner(self, word, count):
         '''
@@ -52,5 +52,3 @@ class MRReviewWordCount(MRJob):
 
 if __name__ == '__main__':
     MRReviewWordCount.run()
-
-    

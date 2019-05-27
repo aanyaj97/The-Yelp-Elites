@@ -17,8 +17,8 @@ class MRReviewWordCount(MRJob):
 
         data_entry = ast.literal_eval(line)
         words = data_entry["text"].split()
-        lower_unique = set([word.translate(str.maketrans('', '',\
-                           string.punctuation)).lower() for word in words])
+        lower_unique = [word.translate(str.maketrans('', '',\
+                           string.punctuation)).lower() for word in words]
         for word in lower_unique:
             if word:
                yield (word, 1)
@@ -35,8 +35,7 @@ class MRReviewWordCount(MRJob):
 
     def reducer(self, word, count):
         '''
-        Reducer function to filter out visitors who visited less than
-        10 times.
+        Reducer function to filter out words whose count is less than the top 50.
         '''
 
         total = sum(count)

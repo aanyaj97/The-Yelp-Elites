@@ -10,6 +10,7 @@ with open('vocab_dict.json', 'w') as outfile:
         d = {}
         for line in infile:
             word_key = tuple(line.split())
-            k, v = word_key
-            d[k[1:-1]] = int(v)
+            if len(word_key) == 2:
+                k, v = word_key
+                d[k[1:-1]] = int(v)
         json.dump(d, outfile)

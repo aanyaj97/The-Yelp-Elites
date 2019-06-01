@@ -15,7 +15,7 @@ from mrjob.job import MRJob
 # remove the top 50 words (likely stop words) from vocabulary as they do not
 # indicate sentiment.
 
-STOP_WORDS = ["i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you",\
+STOP_WORDS = [""," ","i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you",\
               "your", "yours", "yourself", "yourselves", "he", "him", "his",\
               "himself", "she", "her", "hers", "herself", "it", "its", "itself",\
               "they", "them", "their", "theirs", "themselves", "what", "which",\

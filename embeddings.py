@@ -57,13 +57,7 @@ def embedding(chunk, vocab_json):
         for index in range(len(review)):
             if review[index] not in vocab: 
                 continue
-            #print('this is word')
-            #print(review[index])
-            #print('this is review')
-            #print(review)
-            #print('back')
             pairs = back(vocab, review, index, window)
-            #print('front')
             pairs += front(vocab, review, index, window)
             for pair in pairs:
                 index0 = vocab[pair[0]]

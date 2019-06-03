@@ -49,6 +49,7 @@ def create_rec_list(user_id, tfidf_file, num_recs):
     rec_list = []
     for i in range(n): 
         ind = np.argsort(mat[i])[:num_recs]
+        print(ind)
         rec_list += [(index_dict[i], j) for j in ind]
     print(rec_list)
     return rec_list 

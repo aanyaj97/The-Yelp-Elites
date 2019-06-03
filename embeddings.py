@@ -14,7 +14,6 @@ def create_embmat(review_csv, vocab_json):
     comm = MPI.COMM_WORLD
     rank, size = comm.Get_rank(), comm.Get_size() 
     if rank == 0: 
-        #print("splitting file")
         csvfile = open(review_csv)
         readCSV = csv.reader(csvfile, delimiter=',')
         review_data = np.array(list(readCSV))
@@ -22,12 +21,7 @@ def create_embmat(review_csv, vocab_json):
     else: 
         chunks = None 
     chunk = comm.scatter(chunks, root=0)
-    # print('read file', elapsed_time)
-    # print('running embedding')
     chunk = embedding(chunk, vocab_json)
-    # print('this is chunk')
-    # print(type(chunk))
-    # print(np.shape(chunk))
     gathered_chunks = comm.gather(chunk, root=0)
     elapsed_time = time.time() - start_time
     print('gathered chunks done', elapsed_time)
@@ -84,7 +78,6 @@ def front(vocab, words, index, window):
     counter = 1 
     index += 1
     while (counter < window and index < length):
-    #while (num_context < window and index < length):
         context = words[index]
         if context in vocab:
             front_pairs.append((word, context))
@@ -101,9 +94,7 @@ def back(vocab, words, index, window):
     counter = 1 
     index -= 1
     while (counter < window and index >= 0):
-    #while (num_context < window and index < length):
         context = words[index]
-        #print(word, context)
         if context in vocab:
             back_pairs.append((word, context))
             num_context += 1

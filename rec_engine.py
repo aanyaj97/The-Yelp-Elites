@@ -62,6 +62,8 @@ def recommend(list_of_tups, num_recs):
         business_id_dict = json.load(g)
     with open('businessid_business_name_dict.json', 'r') as h:
         business_name_dict = json.load(h)
+    with open('good_businesses.json', 'r') as i:
+        good_businesses = json.load(i)
 
     list_of_lists = []
     for i in range(0, int(len(list_of_tups)/num_recs)):
@@ -93,21 +95,27 @@ def recommend(list_of_tups, num_recs):
         business_name_list = []
         for review_id in review_id_list:
             business_id = business_id_dict[review_id]
-            business_name = business_name_dict[business_id]
-            business_name_list.append(business_name)
+            if business_id in good_businesses:
+                business_name = business_name_dict[business_id]
+                business_name_list.append(business_name)
         rec_businesses.append(business_name_list)
 
     for business in liked_businesses:
         rec_list = rec_businesses[liked_businesses.index(business)]
         s_recommend = ''
+        f = None
         if num_recs > 1:
             for ind in range(0, len(rec_list) - 1):
                 s_recommend = s_recommend + rec_list[ind] + ', '
             s_recommend = s_recommend + 'and ' + rec_list[len(rec_list) - 1]
         else:
-            s_recommend = rec_list[0]
-        s = 'Because you liked {}, we think you should try {}.'.format(business, s_recommend)
-        print(s)
+            try:
+                s_recommend = rec_list[0]
+            except IndexError:
+                f = 1
+        if f == None:
+            s = 'Because you liked {}, we think you should try {}.'.format(business, s_recommend)
+            print(s)
 
 
 

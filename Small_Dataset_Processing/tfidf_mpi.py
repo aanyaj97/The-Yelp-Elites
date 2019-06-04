@@ -17,7 +17,7 @@ def create_embmat(review_csv, vocab_json, freq_json):
         csvfile = open(review_csv)
         readCSV = csv.reader(csvfile, delimiter=',')
         review_data = np.array(list(readCSV))
-        tot = len(review_data) 
+        tot = 6685900 #total number of reviews in dataset 
         comm.send(tot, dest=1, tag=7) 
         chunks = np.array_split(review_data, size)
     else: 

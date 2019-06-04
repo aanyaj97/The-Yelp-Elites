@@ -30,9 +30,9 @@ def find_top_k_words(tf_idf, word_dict_file, k):
     
     freq_dict = {}
     for i in range(1, k+1):
-        index = index_array[0, -i]
+        index = index_array[-i]
         word = index_dict[index]
-        freq = v_1[0, index]
+        freq = v_1[index]
         freq_dict[word] = freq
 
     return freq_dict

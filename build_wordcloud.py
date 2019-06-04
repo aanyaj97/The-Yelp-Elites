@@ -14,8 +14,12 @@ import numpy as np
 from PIL import Image
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
+import scipy.sparse as sp 
 
-def find_top_k_words(tf_idf, word_dict_file, k):
+def find_top_k_words(tf_idf_npz, word_dict_file, k):
+    
+    sparse_tfidf = sp.load_npz(tf_idf_npz) 
+    tf_idf = sparse_tfidf.toarray()
 
     v = tf_idf.shape[1] # number of words in vocab 
     v_1 = np.sum(tf_idf, axis=0)
@@ -38,11 +42,11 @@ def find_top_k_words(tf_idf, word_dict_file, k):
     return freq_dict
 
 
-def run(tf_idf, word_dict_file, k, png_file):
+def run(tf_idf_npz, word_dict_file, k, png_file):
 
     cloud_mask = np.array(Image.open(png_file))
 
-    freq_dict = find_top_k_words(tf_idf, word_dict_file, k)
+    freq_dict = find_top_k_words(tf_idf_npz, word_dict_file, k)
     
     wc = WordCloud(background_color="white", mask=cloud_mask)
     wordcloud = wc.generate_from_frequencies(freq_dict)

@@ -17,4 +17,5 @@ def make_dummy_array():
     mat = np.array(mat_list)
     mat = csr_matrix(mat)
     save_npz(mat)
+    return mat
 

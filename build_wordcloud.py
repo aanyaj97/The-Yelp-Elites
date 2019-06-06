@@ -51,7 +51,7 @@ def find_top_k_words(tf_idf_npz, word_dict_file, k):
 
 def run(tf_idf_npz, word_dict_file, k, png_file):
     '''
-    png_file = image you'd like your wordcloud to be shaped after
+    png_file = image you'd like your wordcloud to be shaped
     '''
 
     cloud_mask = np.array(Image.open(png_file))
@@ -64,3 +64,6 @@ def run(tf_idf_npz, word_dict_file, k, png_file):
     plt.imshow(wordcloud, interpolation="bilinear", )
     plt.axis("off")
     plt.show()
+
+if __name__ == "__main__":
+    run('tfidf_npz/SC_tfidf.npz', 'Small_Dataset_Processing/vocab_ind20.json', 1000, 'yelp_logo.png')

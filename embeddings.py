@@ -10,6 +10,13 @@ import scipy.sparse.linalg as lin
 
 
 def create_embmat(review_csv, vocab_json): 
+    '''
+    Saves sparse word_embedding matrix using MPI. 
+
+    Inputs: 
+        review_csv: csv file of reviews. 
+        vocab_json: vocabulary in the form of word : index dictionary 
+    ''' 
     start_time = time.time() 
     comm = MPI.COMM_WORLD
     rank, size = comm.Get_rank(), comm.Get_size() 
@@ -42,6 +49,15 @@ def create_embmat(review_csv, vocab_json):
 
 
 def embedding(chunk, vocab_json): 
+    ''' 
+    Helper function to apply PMI word embedding formula
+    for each MPI chunk. 
+
+    Inputs: 
+        chunk: list of split reviews 
+        vocab_json: vocabulary in the form of word : index dictionary 
+
+    ''' 
     with open(vocab_json,  errors='ignore') as vj: 
         vocab = json.load(vj, strict=False)
         v = len(vocab)
@@ -71,6 +87,21 @@ def embedding(chunk, vocab_json):
 
 
 def front(vocab, words, index, window):
+    '''
+    Helper function that gets word_tuple pairs in front of word 
+
+    If review is "Thai 55 is trash" and the chosen word is 55.
+    then this will returns pairs (55, is) and (55, trash) 
+
+    Inputs: 
+        vocab: vocab_json 
+        words: list of words in review 
+        index: index of chosen word in review 
+        window: max_distance of words of pairs. 
+
+    Outputs: 
+        List of tuple pairs 
+    ''' 
     front_pairs = []
     word = words[index]
     num_context = 0
@@ -87,6 +118,10 @@ def front(vocab, words, index, window):
     return front_pairs
     
 def back(vocab, words, index, window):
+    '''
+    Identical function to forward except gets word pairs BEHIND 
+    chosen word. 
+    ''' 
     back_pairs = []
     word = words[index]
     num_context = 0

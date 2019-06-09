@@ -70,27 +70,18 @@ def recommend(list_of_tups, num_recs):
         interval = num_recs*i
         list_of_lists.append(list_of_tups[interval:interval+num_recs])
 
-    liked_review_ids = []
     recommended_review_ids = []
     for l in list_of_lists:
-        liked_index = l[0][0]
         rec_indices = []
         rec_ids = []
         for tup in l:
             rec_indices.append(tup[1]) 
         for (review_id, index) in review_index_dict.items():
-            if index == liked_index:
-                liked_review_ids.append(review_id)
-            elif index in rec_indices:
+            if index in rec_indices:
                 rec_ids.append(review_id)
         recommended_review_ids.append(rec_ids)
 
-    liked_businesses = []
     rec_businesses = []
-    for review_id in liked_review_ids:
-        business_id = business_id_dict[review_id]
-        business_name = business_name_dict[business_id]
-        liked_businesses.append(business_name)
     for review_id_list in recommended_review_ids:
         business_name_list = []
         for review_id in review_id_list:
@@ -100,31 +91,33 @@ def recommend(list_of_tups, num_recs):
                 business_name_list.append(business_name)
         rec_businesses.append(business_name_list)
 
-    for business in liked_businesses:
-        rec_list = rec_businesses[liked_businesses.index(business)]
+    recommended_businesses = []
+    for rec_business_list in rec_businesses:
+        for rest in rec_business_list:
+            if rest not in recommended_businesses:
+                recommended_businesses.append(rest)
+
+    if len(recommended_businesses) > 0:
         s_recommend = ''
-        f = None
-        if num_recs > 1:
-            for ind in range(0, len(rec_list) - 1):
-                s_recommend = s_recommend + rec_list[ind] + ', '
-            s_recommend = s_recommend + 'and ' + rec_list[len(rec_list) - 1]
-        else:
-            try:
-                s_recommend = rec_list[0]
-            except IndexError:
-                f = 1
-        if f == None:
-            s = 'Because you liked {}, we think you should try {}.'.format(business, s_recommend)
-            print(s)
+        for rest in recommended_businesses:
+            if recommended_businesses.index(rest) != (len(recommended_businesses) - 1):
+                s_recommend = s_recommend + rest + ', '
+            else:
+                s_recommend = s_recommend + 'and ' + rest
+    else:
+        s = "We couldn't find any recommendations based on the restaurants you like."
+    if s_recommend != '':
+        s = 'Because of the restaurants you liked, we think you should try {}.'.format(s_recommend)
+    print(s)
 
 
 
 def go(user_id, tfidf_file, num_recs): 
     rec_list = create_rec_list(user_id, tfidf_file, num_recs)
-    recommend(rec_list)
+    recommend(rec_list, num_recs)
 
 if __name__ == '__main__':
-    go('7bbZoD0Tc2v1t8hYNY8GMA', 'tfidf.npz', 3)
+    go('7bbZoD0Tc2v1t8hYNY8GMA', 'tfidf.npz', 5)
 
 
 

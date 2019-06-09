@@ -6,7 +6,11 @@ import re
 import mrjob.parse
 from google.cloud import logging
 from google.cloud import storage
-
+'''
+    Version of runner.py, altered to iterate over multiple states. Indexes the reviews from a given
+    dataset.
+    Example output is in <state abbreviation>_review_index_dict.json (i.e., PA_review_index_dict.json)
+'''
 states_list = ['AB', 'AZ', 'IL', 'NC', 'NV', 'OH', 'ON', 'PA', 'QC', 'SC']
 
 def run():

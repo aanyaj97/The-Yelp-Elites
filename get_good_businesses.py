@@ -1,6 +1,14 @@
 from mrjob.job import MRJob
 from mrjob.protocol import JSONValueProtocol
 import ast
+'''
+    Use MapReduce to create a list of businesses that have 4.0 stars or higher and are open.
+    Example output (using Champaign dataset) is in good_businesses.json
+    Used to generate recommendation engine output.
+    
+    To run:
+    python3 get_good_businesses.py <business dataset filename (JSON)>
+    '''
 
 class MRGoodBusinesses(MRJob):
 

@@ -2,9 +2,12 @@ import numpy as np
 import json
 from mrjob.job import MRJob
 import sys
-from mrjob.protocol import PickleValueProtocol
-import pandas as pd
-
+'''
+    Uses MapReduce to create an array of zeros and ones for a review dataset. A review is given a 1 if
+    its star rating is greater than or equal to --min_pos_val, and a zero otherwise. Output is a list,
+    which was then turned into a sparse matrix using iPython (sparse_pos_matrix.npz).
+    Example output comes from Champaign dataset.
+'''
 with open('Small_Dataset_Processing/smaller_review_index_dict.json', 'r') as f:
     review_index_dict = json.load(f)
 

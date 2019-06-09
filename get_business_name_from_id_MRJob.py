@@ -3,7 +3,14 @@ from mrjob.job import MRJob
 import string
 import ast
 from mrjob.protocol import JSONValueProtocol
-
+'''
+    Use MapReduce to extract the business name from each business in a dataset.
+    Used with get_business_id_from_review_id_MRJob.py to generate recommendation engine output.
+    Example output (using Champaign dataset) is in businessid_business_name_dict.json
+    
+    To run:
+    python3 get_business_name_from_id_MRJob.py <business dataset filename (JSON)>
+    '''
 class MRGetBusinessName(MRJob):
 
     OUTPUT_PROTOCOL = JSONValueProtocol

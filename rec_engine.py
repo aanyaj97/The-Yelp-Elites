@@ -99,11 +99,16 @@ def recommend(list_of_tups, num_recs):
 
     if len(recommended_businesses) > 0:
         s_recommend = ''
-        for rest in recommended_businesses:
-            if recommended_businesses.index(rest) != (len(recommended_businesses) - 1):
-                s_recommend = s_recommend + rest + ', '
-            else:
-                s_recommend = s_recommend + 'and ' + rest
+        if len(recommended_businesses) > 2:
+            for rest in recommended_businesses:
+                if recommended_businesses.index(rest) != (len(recommended_businesses) - 1):
+                    s_recommend = s_recommend + rest + ', '
+                else:
+                    s_recommend = s_recommend + 'and ' + rest
+        elif len(recommended_businesses) == 1:
+            s_recommend = recommended_businesses[0]
+        elif len(recommended_businesses) == 2:
+            s_recommend = recommended_businesses[0] + ' and ' + recommended_businesses[1]
     else:
         s = "We couldn't find any recommendations based on the restaurants you like."
     if s_recommend != '':
@@ -117,7 +122,7 @@ def go(user_id, tfidf_file, num_recs):
     recommend(rec_list, num_recs)
 
 if __name__ == '__main__':
-    go('7bbZoD0Tc2v1t8hYNY8GMA', 'tfidf.npz', 5)
+    go('7bbZoD0Tc2v1t8hYNY8GMA', 'tfidf.npz', 1)
 
 
 

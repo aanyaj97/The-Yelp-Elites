@@ -3,6 +3,12 @@ from mrjob.job import MRJob
 import string
 import ast
 from mrjob.protocol import JSONValueProtocol
+'''
+    Use MapReduce to extract the business ID from each review in a dataset.
+    Example output (using Champaign dataset) is in reviewid_businessid_dict.json
+    To run:
+    python3 get_business_id_from_review_id_MRJob.py <review dataset filename (JSON)>
+'''
 
 class MRGetBusinessID(MRJob):
 

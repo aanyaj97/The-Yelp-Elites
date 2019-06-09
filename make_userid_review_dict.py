@@ -1,6 +1,10 @@
 from mrjob.job import MRJob
 from mrjob.protocol import JSONValueProtocol
 import ast
+'''
+    Uses MapReduce to create a dictionary mapping user ID to a list of review IDs written by the user.
+    Example output (from Champaign dataset) is in userid_review_dict.json.
+'''
 
 class MRUserIDReviews(MRJob):
 

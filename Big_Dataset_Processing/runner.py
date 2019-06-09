@@ -6,6 +6,11 @@ import re
 import mrjob.parse
 from google.cloud import logging
 from google.cloud import storage
+'''
+    Runner file for index.py. This file was used to index Champaign dataset only; runner_states.py was used to
+    index the rest of the datasets (done in a loop).
+    Indexes review IDs for a single dataset.
+'''
 
 def run():
     reducer_output = []

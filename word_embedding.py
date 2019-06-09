@@ -2,7 +2,7 @@ import numpy as np
 from scipy import spatial
 
 
-# This is the saved word_embedding matrix computed using MPI 
+# This is the saved word_embedding matrix computed from embeddings.py 
 with np.load('matrix_W.npz') as data:
     W = data['arr_0']
 

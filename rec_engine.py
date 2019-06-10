@@ -2,8 +2,18 @@ import numpy as np
 import scipy.sparse as sp 
 import json
 
-# maps the current index in small matrix to index in larger tf-idf matrix 
+'''
+This file creates recommendation engine such that given a unique user ID, 
+it would provide a list of recommended places based on high 
+TFIDF similarity scores. This is done over a test dataset for places 
+among Champaign, IL, but can be used for larger datasets with relevant 
+files as inputs. 
 
+test more sample user ids from userid_4star_review_dict.json 
+where file is in the form user_id: [list of 4star+ review_ids]
+''' 
+
+# maps the current index in small matrix to index in larger tf-idf matrix 
 def make_user_matrix(user_id, tfidf_file):
 
     tf_idf = sp.load_npz(tfidf_file)
@@ -33,10 +43,14 @@ def make_user_matrix(user_id, tfidf_file):
     return result_array, index_dict 
 
 def create_rec_list(user_id, tfidf_file, num_recs): 
+    '''
+    Function that computes the recommendation list. 
+
+    ''' 
     tf_idf = sp.load_npz(tfidf_file)
     tf_idf = tf_idf.toarray() 
     pos_mat, index_dict = make_user_matrix(user_id, tfidf_file)
-    print('made user matrix')
+    #print('made user matrix')
     mat = np.matmul(pos_mat, tf_idf.T) 
     (n, m) = np.shape(mat)
     for i in range(n): 
@@ -45,17 +59,29 @@ def create_rec_list(user_id, tfidf_file, num_recs):
         mat[:, j] = mat[:, j] / (np.linalg.norm(tf_idf[j]) + 1)
     for big_index in index_dict.values(): 
         mat[:, big_index] = mat[:, big_index] * 0
-    print('computed cosine similarities')
+    #print('computed cosine similarities')
     rec_list = []
     for i in range(n): 
         ind = np.argsort(mat[i])[:num_recs]
-        print(ind)
         rec_list += [(index_dict[i], j) for j in ind]
-    print(rec_list)
     return rec_list 
 
 
 def recommend(list_of_tups, num_recs):
+    '''
+    Handles post processing and prints output of recommendations. 
+
+    Input: 
+        list_of_tups: (pairs, of restaurants). Note that this could be done with a 
+        simple list, but the function could also be modified to give recommendations 
+        based on specific places you may have visited rather than general ones so it 
+        is useful to pass list of tuples. 
+
+        num_recs: number of recommendations. Note the function  may not yield the 
+        as many recommendations as that of num_recs, because it filters whether 
+        the restaurant has positive reviews. 
+
+    ''' 
     with open('Small_Dataset_Processing/smaller_review_index_dict.json', 'r') as f:
         review_index_dict = json.load(f)
     with open('reviewid_businessid_dict.json', 'r') as g:
@@ -96,9 +122,8 @@ def recommend(list_of_tups, num_recs):
         for rest in rec_business_list:
             if rest not in recommended_businesses:
                 recommended_businesses.append(rest)
-
+    s_recommend = ''
     if len(recommended_businesses) > 0:
-        s_recommend = ''
         if len(recommended_businesses) > 2:
             for rest in recommended_businesses:
                 if recommended_businesses.index(rest) != (len(recommended_businesses) - 1):
@@ -110,10 +135,12 @@ def recommend(list_of_tups, num_recs):
         elif len(recommended_businesses) == 2:
             s_recommend = recommended_businesses[0] + ' and ' + recommended_businesses[1]
     else:
-        s = "We couldn't find any recommendations based on the restaurants you like."
+        s = "We couldn't find any recommendations based on the places you like."
+        print(s)
+        return None 
     if s_recommend != '':
-        s = 'Because of the restaurants you liked, we think you should try {}.'.format(s_recommend)
-    print(s)
+        s = 'Because of the places you liked, we think you should try {}.'.format(s_recommend)
+    print(s)        
 
 
 
@@ -122,7 +149,8 @@ def go(user_id, tfidf_file, num_recs):
     recommend(rec_list, num_recs)
 
 if __name__ == '__main__':
-    go('7bbZoD0Tc2v1t8hYNY8GMA', 'tfidf.npz', 1)
+    go("nCbHlJEJtqpGIWLRtlTQ0g", 'tfidf.npz', 10) #sample user-id. 
+
 
 
 

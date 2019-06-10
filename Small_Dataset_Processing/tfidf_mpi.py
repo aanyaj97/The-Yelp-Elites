@@ -10,6 +10,15 @@ import scipy.sparse.linalg as lin
 import math 
 
 def create_embmat(review_csv, vocab_json, freq_json): 
+    '''
+    Saves sparse word_embedding matrix using MPI. 
+
+    Inputs: 
+        review_csv: csv file of reviews. 
+        vocab_json: vocabulary in the form of word : index dictionary 
+        freq_json: frequency of vocab in the form word : number of reviews 
+                                                         containing word 
+    ''' 
     start_time = time.time() 
     comm = MPI.COMM_WORLD
     rank, size = comm.Get_rank(), comm.Get_size() 
@@ -35,6 +44,18 @@ def create_embmat(review_csv, vocab_json, freq_json):
 
 
 def tfidf(chunk, vocab_json, freq_json, tot):
+    ''' 
+    Helper function to apply tfidf formula 
+    for each MPI chunk. 
+
+
+    Inputs: 
+        chunk: (list of lists) list of split reviews (reviews are list of words)
+        review_csv: csv file of reviews. 
+        vocab_json: vocabulary in the form of word : index dictionary 
+        freq_json: frequency of vocab in the form word : number of reviews 
+                                                         containing word 
+    ''' 
     with open(vocab_json,  errors='ignore') as vj: 
         vocab = json.load(vj, strict=False)
     with open(freq_json,  errors='ignore') as fj: 

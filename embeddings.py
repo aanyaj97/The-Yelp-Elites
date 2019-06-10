@@ -54,7 +54,7 @@ def embedding(chunk, vocab_json):
     for each MPI chunk. 
 
     Inputs: 
-        chunk: list of split reviews 
+        chunk: (list of lists) list of split reviews (reviews are list of words)
         vocab_json: vocabulary in the form of word : index dictionary 
 
     ''' 
